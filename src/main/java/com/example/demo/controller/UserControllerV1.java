@@ -4,6 +4,8 @@ import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,44 +16,55 @@ public class UserControllerV1 {
 
     private final UserService service;
 
-    public UserControllerV1(@Qualifier("userServiceImplV1") UserService service){
-    this.service = service;
-}
-
+    public UserControllerV1(@Qualifier("userServiceImplV1") UserService service) {
+        this.service = service;
+    }
 
     @PostMapping
-    public User create(@RequestBody User user) {
-        return service.createUser(user);
+    public ResponseEntity<User> create(@RequestBody User user) {
+        User savedUser = service.createUser(user);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public User get(@PathVariable Long id) {
-        return service.getUserById(id);
+    public ResponseEntity<User> get(@PathVariable Long id) {
+        User user = service.getUserById(id);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping
-    public List<User> getAll() {
-        return service.getAllUsers();
+    public ResponseEntity<List<User>> getAll() {
+        List<User> users = service.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id,
-                           @RequestBody User user) {
-        return service.updateUser(id, user);
-    }
-    @PatchMapping("/{id}")
-    public User patchUser(
-        @PathVariable Long id,
-        @RequestBody User user
-    ) {
-        return service.patchUser(id, user);
+    public ResponseEntity<User> updateUser(
+            @PathVariable Long id,
+            @RequestBody User user) {
+
+        User updatedUser = service.updateUser(id, user);
+        return ResponseEntity.ok(updatedUser);
     }
 
-    
+    @PatchMapping("/{id}")
+    public ResponseEntity<User> patchUser(
+            @PathVariable Long id,
+            @RequestBody User user) {
+
+        User patchedUser = service.patchUser(id, user);
+        return ResponseEntity.ok(patchedUser);
+    }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         service.deleteUser(id);
-        return "User deleted successfully with id " + id;
+        return ResponseEntity.ok("User deleted successfully with id " + id);
+    }
+
+    @DeleteMapping("/all")
+    public String deleteAllUsers() {
+        service.deleteAllUsers();
+        return "All users deleted successfully";
     }
 }

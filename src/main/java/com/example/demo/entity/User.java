@@ -19,8 +19,9 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false) 
     private String email;
+
 
     public Long getId() { 
         return id; 

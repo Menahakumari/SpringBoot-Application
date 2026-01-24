@@ -17,6 +17,10 @@ public class UserServiceImplV1 implements UserService {
         this.repo = repo;
     }
 
+     @Override
+    public void deleteAllUsers() {
+        repo.deleteAll();
+    }
     
     @Override
     public User createUser(User user) {
@@ -47,9 +51,8 @@ public class UserServiceImplV1 implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found with id " + id));
+        return repo.findById(id).orElseThrow(() -> 
+            new ResourceNotFoundException("User not found with id " + id));
     }
 
 

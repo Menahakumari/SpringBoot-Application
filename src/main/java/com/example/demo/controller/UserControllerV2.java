@@ -56,4 +56,10 @@ public class UserControllerV2 {
         service.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
     }
+
+     @DeleteMapping("/all")
+    public String deleteAllUsers() {
+        service.deleteAllUsers();
+        return "All users deleted successfully";
+    }
 }
